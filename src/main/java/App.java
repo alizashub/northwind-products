@@ -10,7 +10,7 @@ public class App {
         dataSource.setPassword("yearup");
 
         try (
-                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/northwind", "root", "yearup");
+                Connection connection = dataSource.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSetProducts = statement.executeQuery("SELECT ProductID, ProductName, UnitPrice, UnitsInStock FROM products");
                 ) {
