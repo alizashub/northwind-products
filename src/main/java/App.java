@@ -1,12 +1,19 @@
 import java.sql.*;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 public class App {
     public static void main(String[] args) {
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/northwind", "root", "yearup");
-             Statement statement = connection.createStatement();
-             ResultSet resultSetProducts = statement.executeQuery("SELECT ProductID, ProductName, UnitPrice, UnitsInStock FROM products");
-        ) {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl("jdbc:mysql://localhost:3306/northwind");
+        dataSource.setUsername("root");
+        dataSource.setPassword("yearup");
+
+        try (
+                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/northwind", "root", "yearup");
+                Statement statement = connection.createStatement();
+                ResultSet resultSetProducts = statement.executeQuery("SELECT ProductID, ProductName, UnitPrice, UnitsInStock FROM products");
+                ) {
             System.out.println("Products");
             while (resultSetProducts.next()) {
                 int id = resultSetProducts.getInt("ProductID");
@@ -21,8 +28,7 @@ public class App {
                 System.out.println("*****************************");
             }
 
-            ResultSet resultSetCustomer = statement.executeQuery("SELECT ContactName, CompanyName, City, Country, Phone " + "FROM customers ORDER BY Country"
-            );
+            ResultSet resultSetCustomer = statement.executeQuery("SELECT ContactName, CompanyName, City, Country, Phone " + "FROM customers ORDER BY Country");
 
             System.out.println("Customers");
             while (resultSetCustomer.next()) {
@@ -30,7 +36,7 @@ public class App {
                 String company = resultSetCustomer.getString("CompanyName");
                 String city = resultSetCustomer.getString("City");
                 String country = resultSetCustomer.getString("Country");
-               String phone = resultSetCustomer.getString("Phone");
+                String phone = resultSetCustomer.getString("Phone");
 
                 System.out.println("Contact : " + contact);
                 System.out.println("Company : " + company);
